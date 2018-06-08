@@ -69,12 +69,25 @@ VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momen
   // You'll need the arm length parameter L, and the drag/thrust ratio kappa
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+  // Motor Control.pdf pinned on slack helped in this code
 
-  cmd.desiredThrustsN[0] = mass * 9.81f / 4.f; // front left
-  cmd.desiredThrustsN[1] = mass * 9.81f / 4.f; // front right
-  cmd.desiredThrustsN[2] = mass * 9.81f / 4.f; // rear left
-  cmd.desiredThrustsN[3] = mass * 9.81f / 4.f; // rear right
+  float l = L / sqrt(2);
 
+  float A = collThrustCmd;
+  float B = momentCmd.x / l;
+  float C = momentCmd.y / l;
+  float D = -momentCmd.z / kappa;
+
+  float Thr1 = (A + B + C + D) / 4.0;
+  float Thr2 = (A - B + C - D) / 4.0;
+  float Thr3 = (A + B - C - D) / 4.0;
+  float Thr4 = (A - B - C + D) / 4.0;
+
+  cmd.desiredThrustsN[0] = Thr1; // front left
+  cmd.desiredThrustsN[1] = Thr2; // front right
+  cmd.desiredThrustsN[2] = Thr3; // rear left
+  cmd.desiredThrustsN[3] = Thr4; // rear right
+  
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
   return cmd;
@@ -97,8 +110,14 @@ V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
   V3F momentCmd;
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+  //kpPQR - Angle Rate Gains
+  float u_bar_p = kpPQR[0] * (pqrCmd.x - pqr.x) * Ixx;
+  float u_bar_q = kpPQR[1] * (pqrCmd.y - pqr.y) * Iyy;
+  float u_bar_r = kpPQR[2] * (pqrCmd.z - pqr.z) * Izz;
 
-  
+  momentCmd.x = u_bar_p;
+  momentCmd.y = u_bar_q;
+  momentCmd.z = u_bar_r;
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
@@ -129,7 +148,22 @@ V3F QuadControl::RollPitchControl(V3F accelCmd, Quaternion<float> attitude, floa
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
+  float b_x = R(0, 2);
+  float b_y = R(1, 2);
 
+  float c = collThrustCmd / mass; // c = total commanded thrust
+  float b_x_c = accelCmd.x / c;
+  float b_y_c = accelCmd.y / c;
+
+  float b_x_commanded_dot = kpBank * (b_x_c - b_x);
+  float b_y_commanded_dot = kpBank * (b_y_c - b_y);
+  
+  float p_c = (R(1, 0) * b_x_commanded_dot - R(0, 0) * b_y_commanded_dot) / R(2, 2);
+  float q_c = (R(1, 1) * b_x_commanded_dot - R(0, 1) * b_y_commanded_dot) / R(2, 2);
+  
+  pqrCmd.x = p_c;
+  pqrCmd.y = q_c;
+  pqrCmd.z = 0.0;
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
@@ -161,7 +195,14 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
-
+  float z_err = posZCmd - posZ;
+  float z_err_dot = velZCmd - velZ;
+  float b_z = R(2, 2);
+  float p_term = kpPosZ * z_err;
+  float d_term = kpVelZ * z_err_dot;
+  float u_1_bar = p_term + d_term + accelZCmd;
+  
+  thrust = (u_1_bar - dt)/b_z;
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
   
@@ -199,7 +240,11 @@ V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
+  float b_x_c = ((kpPosXY * (posCmd.x - pos.x)) + (kpVelXY * (velCmd.x - vel.x)) + accelCmdFF.x);
+  float b_y_c = ((kpPosXY * (posCmd.y - pos.y)) + (kpVelXY * (velCmd.y - vel.y)) + accelCmdFF.y);
   
+  accelCmd.x = b_x_c;
+  accelCmd.y = b_y_c;
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
@@ -219,14 +264,14 @@ float QuadControl::YawControl(float yawCmd, float yaw)
   //  - use fmodf(foo,b) to unwrap a radian angle measure float foo to range [0,b]. 
   //  - use the yaw control gain parameter kpYaw
 
-  float yawRateCmd=0;
+  float yawRateCmd = 0;
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
+  yawRateCmd = kpYaw * (yawCmd - yaw);
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
   return yawRateCmd;
-
 }
 
 VehicleCommand QuadControl::RunControl(float dt, float simTime)
