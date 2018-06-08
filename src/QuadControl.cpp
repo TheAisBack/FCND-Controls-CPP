@@ -69,6 +69,12 @@ VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momen
   // You'll need the arm length parameter L, and the drag/thrust ratio kappa
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+
+  // cmd.desiredThrustsN[0] = mass * 9.81f / 4.f; // front left
+  // cmd.desiredThrustsN[1] = mass * 9.81f / 4.f; // front right
+  // cmd.desiredThrustsN[2] = mass * 9.81f / 4.f; // rear left
+  // cmd.desiredThrustsN[3] = mass * 9.81f / 4.f; // rear right
+
   // Motor Control.pdf pinned on slack helped in this code
 
   float l = L / sqrt(2);
@@ -87,7 +93,7 @@ VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momen
   cmd.desiredThrustsN[1] = Thr2; // front right
   cmd.desiredThrustsN[2] = Thr3; // rear left
   cmd.desiredThrustsN[3] = Thr4; // rear right
-  
+
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
   return cmd;
@@ -110,6 +116,7 @@ V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
   V3F momentCmd;
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+
   //kpPQR - Angle Rate Gains
   float u_bar_p = kpPQR[0] * (pqrCmd.x - pqr.x) * Ixx;
   float u_bar_q = kpPQR[1] * (pqrCmd.y - pqr.y) * Iyy;
@@ -117,7 +124,7 @@ V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
 
   momentCmd.x = u_bar_p;
   momentCmd.y = u_bar_q;
-  momentCmd.z = u_bar_r;
+  momentCmd.z = u_bar_r;  
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
@@ -244,7 +251,7 @@ V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel
   float b_y_c = ((kpPosXY * (posCmd.y - pos.y)) + (kpVelXY * (velCmd.y - vel.y)) + accelCmdFF.y);
   
   accelCmd.x = b_x_c;
-  accelCmd.y = b_y_c;
+  accelCmd.y = b_y_c;  
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
@@ -264,7 +271,7 @@ float QuadControl::YawControl(float yawCmd, float yaw)
   //  - use fmodf(foo,b) to unwrap a radian angle measure float foo to range [0,b]. 
   //  - use the yaw control gain parameter kpYaw
 
-  float yawRateCmd = 0;
+  float yawRateCmd=0;
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
   yawRateCmd = kpYaw * (yawCmd - yaw);
@@ -272,6 +279,7 @@ float QuadControl::YawControl(float yawCmd, float yaw)
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
   return yawRateCmd;
+
 }
 
 VehicleCommand QuadControl::RunControl(float dt, float simTime)
