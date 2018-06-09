@@ -47,10 +47,11 @@ PASS: ABS(Quad.Omega.X) was less than 2.500000 for at least 0.750000 seconds
 
 ### How it was Completed
 
-- Changed kpPosXY from 1 to 20
+- Changed kpPosXY from 1 to 2
 - Changed kpPosZ from 1 to 20
-- Changed kpVelXY from 4 to 6.5
-- Changed kpVelZ from 4 to 7.5
+- Changed KiPosZ from 20 to 6.5
+- Changed kpBank from 5 to 14
+- Changed kpVelZ from 1 to 3
 
 ```
 PASS: ABS(Quad1.Pos.X) was less than 0.100000 for at least 1.250000 seconds
@@ -68,7 +69,12 @@ PASS: ABS(Quad2.Yaw) was less than 0.100000 for at least 1.000000 seconds
 
 ### How it was Completed
 
-- 
+- Increased kpPosXY to 2.75
+- Increased KiPosZ to 30
+- Increased kpVelXY 4 to 12.5
+- Increased kpVelZ 4 to 6.5
+- Lowered kpBank to 12
+- kpPQR was changed from (95, 95, 5) to (75, 45, 15)
 
 ```
 PASS: ABS(Quad1.PosFollowErr) was less than 0.100000 for at least 1.500000 seconds
