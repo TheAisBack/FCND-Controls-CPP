@@ -36,33 +36,60 @@ PASS: ABS(Quad.Roll) was less than 0.025000 for at least 0.750000 seconds
 PASS: ABS(Quad.Omega.X) was less than 2.500000 for at least 0.750000 seconds
 ```
 
+![scenario2](scenario2.png)
+
 ## Scenario 3
 
 ### Task
-    - X position of both drones should be within 0.1 meters of the target for at least 1.25 seconds
-    - Quad2 yaw should be within 0.1 of the target for at least 1 second
+
+- X position of both drones should be within 0.1 meters of the target for at least 1.25 seconds
+- Quad2 yaw should be within 0.1 of the target for at least 1 second
 
 ### How it was Completed
-    - Changed kpPosXY from 1 to 20
-    - Changed kpPosZ from 1 to 20
-    - Changed kpVelXY from 4 to 6.5
-    - Changed kpVelZ from 4 to 7.5
-    - PASS: ABS(Quad1.Pos.X) was less than 0.100000 for at least 1.250000 seconds
-    - PASS: ABS(Quad2.Pos.X) was less than 0.100000 for at least 1.250000 seconds
-    - PASS: ABS(Quad2.Yaw) was less than 0.100000 for at least 1.000000 seconds
+
+- Changed kpPosXY from 1 to 20
+- Changed kpPosZ from 1 to 20
+- Changed kpVelXY from 4 to 6.5
+- Changed kpVelZ from 4 to 7.5
+
+```
+PASS: ABS(Quad1.Pos.X) was less than 0.100000 for at least 1.250000 seconds
+PASS: ABS(Quad2.Pos.X) was less than 0.100000 for at least 1.250000 seconds
+PASS: ABS(Quad2.Yaw) was less than 0.100000 for at least 1.000000 seconds
+```
+
+![scenario3](scenario3.png)
 
 ## Scenario 4
+
 ### Task
-    - position error for all 3 quads should be less than 0.1 meters for at least 1.5 seconds
+
+- position error for all 3 quads should be less than 0.1 meters for at least 1.5 seconds
     
 ### How it was Completed
-    - 
+
+- 
+
+```
+PASS:
+PASS:
+PASS:
+```
+
+![scenario4](scenario4.png)
 
 ## Scenario 5
 
 ### Task
-    - position error of the quad should be less than 0.25 meters for at least 3 seconds
+
+- position error of the quad should be less than 0.25 meters for at least 3 seconds
     
 ### How it was Completed
-    - Keeping the same parameters from Scenario 3, but changing the kpPosXY from 20 to 35
-    - PASS: ABS(Quad2.PosFollowErr) was less than 0.250000 for at least 3.000000 seconds
+
+- Keeping the same parameters from Scenario 3, but changing the kpPosXY from 20 to 35
+
+```
+PASS: ABS(Quad2.PosFollowErr) was less than 0.250000 for at least 3.000000 seconds
+```
+
+![scenario5](scenario5.png)
