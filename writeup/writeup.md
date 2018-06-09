@@ -15,7 +15,7 @@
 PASS: ABS(Quad.PosFollowErr) was less than 0.500000 for at least 0.800000 seconds
 ```
 
-![scenario1](.img/scenario1.png)
+![scenario1](./img/scenario1.png)
 
 ## Scenario 2
 
@@ -36,7 +36,7 @@ PASS: ABS(Quad.Roll) was less than 0.025000 for at least 0.750000 seconds
 PASS: ABS(Quad.Omega.X) was less than 2.500000 for at least 0.750000 seconds
 ```
 
-![scenario2](.img/scenario2.png)
+![scenario2](./img/scenario2.png)
 
 ## Scenario 3
 
@@ -58,7 +58,7 @@ PASS: ABS(Quad2.Pos.X) was less than 0.100000 for at least 1.250000 seconds
 PASS: ABS(Quad2.Yaw) was less than 0.100000 for at least 1.000000 seconds
 ```
 
-![scenario3](.img/scenario3.png)
+![scenario3](./img/scenario3.png)
 
 ## Scenario 4
 
@@ -76,7 +76,7 @@ PASS:
 PASS:
 ```
 
-![scenario4](.img/scenario4.png)
+![scenario4](./img/scenario4.png)
 
 ## Scenario 5
 
@@ -92,7 +92,7 @@ PASS:
 PASS: ABS(Quad2.PosFollowErr) was less than 0.250000 for at least 3.000000 seconds
 ```
 
-![scenario5](.img/scenario5.png)
+![scenario5](./img/scenario5.png)
 
 # Implemented Controller Write Up
 
