@@ -120,10 +120,6 @@ momentCmd.z = u_bar_r;
 ## Roll Pitch Control
 
 - Using the Matrix formulas to get the Roll Pitch Control
-- The Formula has been broken down from:
-	
-	|p_c|	=	(|R_12	-R_11|	x 	|b_x_c|)	/	R_33
-	|q_c|		(|R_22	-R_12|		|b_y_c|)	/
 
 ```
 float b_x = R(0, 2);
