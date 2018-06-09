@@ -6,7 +6,7 @@
 ### Task
 
 - Make the drone stay stable for at least .8 seconds
-    
+
 ### How it was Completed
 
 - To pass this task mass was changed to 0.5 from 0.4
@@ -65,15 +65,15 @@ PASS: ABS(Quad2.Yaw) was less than 0.100000 for at least 1.000000 seconds
 ### Task
 
 - position error for all 3 quads should be less than 0.1 meters for at least 1.5 seconds
-    
+
 ### How it was Completed
 
 - 
 
 ```
-PASS:
-PASS:
-PASS:
+PASS: ABS(Quad1.PosFollowErr) was less than 0.100000 for at least 1.500000 seconds
+PASS: ABS(Quad2.PosFollowErr) was less than 0.100000 for at least 1.500000 seconds
+PASS: ABS(Quad3.PosFollowErr) was less than 0.100000 for at least 1.500000 seconds
 ```
 
 ![scenario4](./img/scenario4.png)
@@ -83,7 +83,7 @@ PASS:
 ### Task
 
 - position error of the quad should be less than 0.25 meters for at least 3 seconds
-    
+
 ### How it was Completed
 
 - Keeping the same parameters from Scenario 3, but changing the kpPosXY from 20 to 35
@@ -159,7 +159,8 @@ float d_term = kpVelZ * z_err_dot;
 
 integratedAltitudeError += z_err * dt;
 
-float u_1_bar = p_term + d_term + accelZCmd + integratedAltitudeError;
+float i_term = KiPosZ * integratedAltitudeError;
+float u_1_bar = p_term + d_term + accelZCmd + i_term;
 float c = (u_1_bar - CONST_GRAVITY)/b_z;
 
 thrust = c * -mass;
@@ -170,28 +171,23 @@ thrust = c * -mass;
 - eh
 
 ```
-float c = 1;
 float x_err = posCmd.x - pos.x;
-float x_err_dot = velCmd.x - vel.x;
-
 float y_err = posCmd.y - pos.y;
-float y_err_dot = velCmd.y - vel.y;
 
 float p_term_x = kpPosXY * x_err;
-float d_term_x = kpVelXY * x_err_dot;
-
 float p_term_y = kpPosXY * y_err;
+
+velCmd.x = CONSTRAIN(p_term_x, -maxSpeedXY, maxSpeedXY);
+velCmd.y = CONSTRAIN(p_term_y, -maxSpeedXY, maxSpeedXY);
+
+float x_err_dot = velCmd.x - vel.x;
+float y_err_dot = velCmd.y - vel.y;
+
+float d_term_x = kpVelXY * x_err_dot;
 float d_term_y = kpVelXY * y_err_dot;
 
-float x_dot_dot_command = p_term_x + d_term_x + accelCmd.x;
-float y_dot_dot_command = p_term_y + d_term_y + accelCmd.y;
-
-float b_x_c = x_dot_dot_command / c;
-float b_y_c = y_dot_dot_command / c;
-
-accelCmd.x = b_x_c;
-accelCmd.y = b_y_c;
-accelCmd.z = 0;
+accelCmd.x = CONSTRAIN(d_term_x, -maxAccelXY, maxAccelXY);
+accelCmd.y = CONSTRAIN(d_term_y, -maxAccelXY, maxAccelXY);
 ```
 
 ## Yaw Control

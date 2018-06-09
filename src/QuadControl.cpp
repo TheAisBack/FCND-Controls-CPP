@@ -158,13 +158,13 @@ V3F QuadControl::RollPitchControl(V3F accelCmd, Quaternion<float> attitude, floa
   // formual from Lesson 14 - Exercise 4.2
   float b_x = R(0, 2);
   float b_y = R(1, 2);
-  float R21 = R(1, 0);
   float R11 = R(0, 0);
-  float R22 = R(1, 1);
   float R12 = R(0, 1);
+  float R21 = R(1, 0);
+  float R22 = R(1, 1);
   float R33 = R(2, 2);
 
-  float c = -collThrustCmd / mass;
+  float c = -(collThrustCmd / mass);
   float b_x_c = accelCmd.x / c;
   float b_y_c = accelCmd.y / c;
 
@@ -224,8 +224,9 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
 
   // Help from thread - May 9th
   integratedAltitudeError += z_err * dt;
-
-  float u_1_bar = p_term + d_term + accelZCmd + integratedAltitudeError;
+  // there is supposed to be an i_term, which is kiPosZ
+  float i_term = KiPosZ * integratedAltitudeError;
+  float u_1_bar = p_term + d_term + accelZCmd + i_term;
   float c = (u_1_bar - CONST_GRAVITY)/b_z;
 
   // May 23rd - adding -mass helps to lift the drone
@@ -268,28 +269,25 @@ V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
-  float c = 1;
   float x_err = posCmd.x - pos.x;
-  float x_err_dot = velCmd.x - vel.x;
-
   float y_err = posCmd.y - pos.y;
-  float y_err_dot = velCmd.y - vel.y;
 
   float p_term_x = kpPosXY * x_err;
-  float d_term_x = kpVelXY * x_err_dot;
-
   float p_term_y = kpPosXY * y_err;
+
+  // limit the max and min of velocity and acceleration
+  velCmd.x = CONSTRAIN(p_term_x, -maxSpeedXY, maxSpeedXY);
+  velCmd.y = CONSTRAIN(p_term_y, -maxSpeedXY, maxSpeedXY);
+
+  float x_err_dot = velCmd.x - vel.x;
+  float y_err_dot = velCmd.y - vel.y;
+
+  float d_term_x = kpVelXY * x_err_dot;
   float d_term_y = kpVelXY * y_err_dot;
 
-  float x_dot_dot_command = p_term_x + d_term_x + accelCmd.x;
-  float y_dot_dot_command = p_term_y + d_term_y + accelCmd.y;
-
-  float b_x_c = x_dot_dot_command / c;
-  float b_y_c = y_dot_dot_command / c;
-
-  accelCmd.x = b_x_c;
-  accelCmd.y = b_y_c;
-  accelCmd.z = 0;
+  // limit the max and min of velocity and acceleration
+  accelCmd.x = CONSTRAIN(d_term_x, -maxAccelXY, maxAccelXY);
+  accelCmd.y = CONSTRAIN(d_term_y, -maxAccelXY, maxAccelXY);
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
@@ -300,12 +298,12 @@ V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel
 float QuadControl::YawControl(float yawCmd, float yaw)
 {
   // Calculate a desired yaw rate to control yaw to yawCmd
-  // INPUTS: 
+  // INPUTS:
   //   yawCmd: commanded yaw [rad]
   //   yaw: current yaw [rad]
   // OUTPUT:
   //   return a desired yaw rate [rad/s]
-  // HINTS: 
+  // HINTS:
   //  - use fmodf(foo,b) to unwrap a radian angle measure float foo to range [0,b].
   //  - use the yaw control gain parameter kpYaw
 
