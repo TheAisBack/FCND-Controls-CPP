@@ -4,27 +4,37 @@
 ## Scenario 1
 
 ### Task
-    - Make the drone stay stable for at least .8 seconds
+
+- Make the drone stay stable for at least .8 seconds
     
 ### How it was Completed
-    - To pass this task mass was changed to 0.5 from 0.4
-    - PASS: ABS(Quad.PosFollowErr) was less than 0.500000 for at least 0.800000 seconds
 
-![scenario1](./writeup/scenario1.png)
+- To pass this task mass was changed to 0.5 from 0.4
+
+```
+PASS: ABS(Quad.PosFollowErr) was less than 0.500000 for at least 0.800000 seconds
+```
+
+![scenario1](scenario1.png)
 
 ## Scenario 2
 
 ### Task
-    - roll should less than 0.025 radian of nominal for 0.75 seconds (3/4 of the duration of the loop)
-    - roll rate should less than 2.5 radian/sec for 0.75 seconds
+
+- roll should less than 0.025 radian of nominal for 0.75 seconds (3/4 of the duration of the loop)
+- roll rate should less than 2.5 radian/sec for 0.75 seconds
 
 ### How it was Completed
-    - Changed kpBank from 5 to 14
-    - Changed kpYaw from 1 to 3
-    - Finally, changed kpPQR from (23, 23, 5) to (95, 95, 5)
-    - These changes allowed me to pass this scenario
-    - PASS: ABS(Quad.Roll) was less than 0.025000 for at least 0.750000 seconds
-    - PASS: ABS(Quad.Omega.X) was less than 2.500000 for at least 0.750000 seconds
+
+- Changed kpBank from 5 to 14
+- Changed kpYaw from 1 to 3
+- Finally, changed kpPQR from (23, 23, 5) to (95, 95, 5)
+- These changes allowed me to pass this scenario
+
+```
+PASS: ABS(Quad.Roll) was less than 0.025000 for at least 0.750000 seconds
+PASS: ABS(Quad.Omega.X) was less than 2.500000 for at least 0.750000 seconds
+```
 
 ## Scenario 3
 
