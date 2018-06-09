@@ -104,7 +104,8 @@ PASS: ABS(Quad2.PosFollowErr) was less than 0.250000 for at least 3.000000 secon
 
 ## Body Rate Control
 
-- eh
+- Formula below for the Body Rate Control written in C++
+- Using inertia, body rates and estimated body rates to calculate the u_bar
 
 ```
 float u_bar_p = kpPQR.x * (pqrCmd.x - pqr.x) * Ixx;
@@ -118,7 +119,11 @@ momentCmd.z = u_bar_r;
 
 ## Roll Pitch Control
 
-- eh
+- Using the Matrix formulas to get the Roll Pitch Control
+- The Formula has been broken down from:
+	
+	|p_c|	=	(|R_12	-R_11|	x 	|b_x_c|)	/	R_33
+	|q_c|		(|R_22	-R_12|		|b_y_c|)	/
 
 ```
 float b_x = R(0, 2);
@@ -152,7 +157,8 @@ pqrCmd.z = 0.0;
 
 ## Altitude Controller
 
-- eh
+- The altitude controller formula is shown below in C++
+- using the CONST_GRAVITY and grabbing p_term, d_term and i_term to formulate the thrust for altitude
 
 ```
 float z_err = posZCmd - posZ;
@@ -174,7 +180,8 @@ thrust = c * -mass;
 
 ## Lateral Position
 
-- eh
+- The lateral position is shown below in C++
+- CONSTRAIN is used to max the accel and minimize it
 
 ```
 float x_err = posCmd.x - pos.x;
@@ -198,7 +205,8 @@ accelCmd.y = CONSTRAIN(d_term_y, -maxAccelXY, maxAccelXY);
 
 ## Yaw Control
 
-- eh
+- Short formula which is shown below in C++
+- grabbing the yaw, yawCmd and kpYaw to formulate the Yaw Control
 
 ```
 float p_err = yawCmd - yaw;
