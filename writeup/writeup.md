@@ -93,3 +93,17 @@ PASS: ABS(Quad2.PosFollowErr) was less than 0.250000 for at least 3.000000 secon
 ```
 
 ![scenario5](scenario5.png)
+
+# Implemented Controller Write Up
+
+## 1. Implemented body rate control in C++.
+
+## 2. Implement roll pitch control in C++.
+
+## 3. Implement altitude controller in C++.
+
+## 4. Implement lateral position control in C++.
+
+## 5. Implement yaw control in C++.
+
+## 6. Implement calculating the motor commands given commanded thrust and moments in C++.
